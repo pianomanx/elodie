@@ -67,7 +67,7 @@ class Photo(Media):
         for key in self.exif_map['date_taken']:
             try:
                 if(key in exif):
-                    if(re.match('\d{4}(-|:)\d{2}(-|:)\d{2}', exif[key]) is not None):  # noqa
+                    if(re.match(r'\d{4}(-|:)\d{2}(-|:)\d{2}', exif[key]) is not None):  # noqa
                         dt, tm = exif[key].split(' ')
                         dt_list = compile(r'-|:').split(dt)
                         dt_list = dt_list + compile(r'-|:').split(tm)
@@ -100,15 +100,14 @@ class Photo(Media):
         if(extension != 'heic'):
             # gh-4 This checks if the source file is an image.
             # Use Pillow to validate the image format.
-            if(self.pillow is not None):
-                try:
-                    im = self.pillow.open(source)
-                    if(im.format is None):
-                        return False
-                except IOError:
+            if(self.pillow is None):
+                return False
+
+            try:
+                im = self.pillow.open(source)
+                if(im.format is None):
                     return False
-            else:
-                # If Pillow is None (e.g., for testing), validation fails
+            except IOError:
                 return False
         
         return extension in self.extensions

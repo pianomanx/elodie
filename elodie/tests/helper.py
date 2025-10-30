@@ -97,7 +97,7 @@ def random_decimal():
 
 def random_coordinate(coordinate, precision):
     # Here we add to the decimal section of the coordinate by a given precision
-    return coordinate + ((10.0 / (10.0**precision)) * random_decimal())
+    return coordinate + (((10.0 / (10.0**precision))) * random_decimal())
 
 def temp_dir():
     return tempfile.gettempdir()
@@ -118,10 +118,10 @@ def path_tz_fix(file_name):
       tz_shift = (datetime.fromtimestamp(0) -
                   datetime.utcfromtimestamp(0)).seconds / 3600
       # replace timestamp in file_name
-      m = re.search('(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})',file_name)
+      m = re.search(r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})',file_name)
       t_date = datetime.fromtimestamp(time.mktime(time.strptime(m.group(0), '%Y-%m-%d_%H-%M-%S')))
       s_date_fix = (t_date-timedelta(hours=tz_shift)).strftime('%Y-%m-%d_%H-%M-%S')
-      return re.sub('\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}',s_date_fix,file_name)
+      return re.sub(r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}',s_date_fix,file_name)
   else:
       return file_name
 
